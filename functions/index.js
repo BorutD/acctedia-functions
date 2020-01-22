@@ -1,48 +1,14 @@
 const functions = require("firebase-functions");
-const admin = require("firebase-admin");
+const app = require("express")();
+// const FBAuth = require("./util/fbAuth");
 
-admin.initializeApp();
+const cors = require("cors");
+app.use(cors());
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-exports.helloWorld = functions.https.onRequest((request, response) => {
-  response.send("Hello from Firebase!");
-});
+const { getProjects, createProject } = require("./handlers/projects");
 
-exports.getProjects = functions.https.onRequest((req, res) => {
-  admin
-    .firestore()
-    .collection("projects")
-    .get()
-    .then(data => {
-      let projects = [];
-      data.forEach(doc => {
-        projects.push(doc.data());
-      });
-      return res.json(projects);
-    })
-    .catch(err => {
-      console.error(err);
-    });
-});
+// Project routes
+app.get("/projects", getProjects);
+app.post("/project", createProject);
 
-exports.createProject = functions.https.onRequest((req, res) => {
-  const newProject = {
-    projectName: req.body.projectName,
-    adminHandle: req.body.adminHandle,
-    createdAt: admin.firestore.Timestamp.fromDate(new Date())
-  };
-
-  admin
-    .firestore()
-    .collection("projects")
-    .add(newProject)
-    .then(doc => {
-      res.json({ message: `document ${doc.id} created successfully` });
-    })
-    .catch(err => {
-      res.status(500).json({ error: "Something went wrong" });
-      console.error(err);
-    });
-});
+exports.api = functions.region("europe-west2").https.onRequest(app);
