@@ -6,9 +6,14 @@ const cors = require("cors");
 app.use(cors());
 
 const { getProjects, createProject } = require("./handlers/projects");
+const { signup, login } = require("./handlers/users");
 
 // Project routes
 app.get("/projects", getProjects);
 app.post("/project", createProject);
+
+// Users routes
+app.post("/signup", signup);
+app.post("/login", login);
 
 exports.api = functions.region("europe-west2").https.onRequest(app);
