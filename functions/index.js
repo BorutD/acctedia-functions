@@ -7,15 +7,19 @@ app.use(cors());
 
 const {
   getProjects,
+  getProject,
   createProject,
-  createTask
+  createTask,
+  deleteProject
 } = require("./handlers/projects");
 const { signup, login } = require("./handlers/users");
 
 // Project routes
 app.get("/projects", getProjects);
+app.get("/project/:projectId", getProject);
 app.post("/project", FBAuth, createProject);
 app.post("/task", FBAuth, createTask);
+app.delete("/project/:projectId", FBAuth, deleteProject);
 
 // Users routes
 app.post("/signup", signup);
