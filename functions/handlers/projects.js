@@ -20,7 +20,7 @@ exports.getProjects = (req, res) => {
 exports.createProject = (req, res) => {
   const newProject = {
     projectName: req.body.projectName,
-    adminHandle: req.body.adminHandle,
+    adminHandle: req.user.handle,
     createdAt: new Date().toISOString()
   };
 
