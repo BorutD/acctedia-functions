@@ -19,7 +19,9 @@ exports.getProjects = (req, res) => {
 
 exports.createProject = (req, res) => {
   const newProject = {
-    projectName: req.body.projectName,
+    title: req.body.title,
+    description: req.body.description,
+    assignedUsers: req.body.assignedUsers,
     adminHandle: req.user.handle,
     createdAt: new Date().toISOString()
   };

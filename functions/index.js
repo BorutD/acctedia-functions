@@ -12,7 +12,8 @@ const {
   createTask,
   deleteProject
 } = require("./handlers/projects");
-const { signup, login } = require("./handlers/users");
+
+const { getUsers, signup, login } = require("./handlers/users");
 
 // Project routes
 app.get("/projects", getProjects);
@@ -22,6 +23,7 @@ app.post("/task", FBAuth, createTask);
 app.delete("/project/:projectId", FBAuth, deleteProject);
 
 // Users routes
+app.get("/users", getUsers);
 app.post("/signup", signup);
 app.post("/login", login);
 

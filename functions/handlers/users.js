@@ -10,6 +10,22 @@ const {
   reduceUserDetails
 } = require("../util/validators");
 
+exports.getUsers = (req, res) => {
+  db.collection("users")
+    .where("role", "==", "User")
+    .get()
+    .then(data => {
+      let users = [];
+      data.forEach(doc => {
+        users.push(doc.data());
+      });
+      return res.json(users);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};
+
 exports.signup = (req, res) => {
   const newUser = {
     email: req.body.email,

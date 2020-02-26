@@ -60,7 +60,7 @@ exports.reduceUserDetails = data => {
 exports.validateProjectData = data => {
   let errors = {};
 
-  if (isEmpty(data.projectName)) {
+  if (isEmpty(data.title)) {
     errors.title = "Must not be empty";
   }
 
