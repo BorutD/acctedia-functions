@@ -4,17 +4,23 @@ const { validateTaskData, validateProjectData } = require("../util/validators");
 
 exports.getProjects = (req, res) => {
   db.collection("projects")
+    .orderBy("createdAt", "desc")
     .get()
     .then(data => {
       let projects = [];
       data.forEach(doc => {
-        projects.push(doc.data());
+        projects.push({
+          projectId: doc.id,
+          title: doc.data().title,
+          description: doc.data().description,
+          adminHandle: doc.data().adminHandle,
+          assignedUsers: doc.data().assignedUsers,
+          createdAt: doc.data().createdAt
+        });
       });
       return res.json(projects);
     })
-    .catch(err => {
-      console.error(err);
-    });
+    .catch(err => console.error(err));
 };
 
 exports.createProject = (req, res) => {
