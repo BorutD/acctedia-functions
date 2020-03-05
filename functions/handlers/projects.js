@@ -1,6 +1,6 @@
 const { db } = require("../util/admin");
 
-const { validateTaskData, validateProjectData } = require("../util/validators");
+const { validateProjectData } = require("../util/validators");
 
 exports.getProjects = (req, res) => {
   db.collection("projects")
@@ -47,29 +47,29 @@ exports.createProject = (req, res) => {
     });
 };
 
-exports.createTask = (req, res) => {
-  const newTask = {
-    title: req.body.title,
-    description: req.body.description,
-    assignedUser: req.body.assignedUser,
-    assignedProject: req.body.assignedProject,
-    duration: req.body.duration,
-    completed: req.body.completed,
-    createdAt: new Date().toISOString()
-  };
+exports.updateProject = (req, res) => {
+  let projectDetails = req.body;
 
-  const { valid, errors } = validateTaskData(newTask);
+  const document = db.doc(`/projects/${req.params.projectId}`);
 
-  if (!valid) return res.status(400).json(errors);
-
-  db.collection("tasks")
-    .add(newTask)
+  document
+    .get()
     .then(doc => {
-      res.json({ message: `document ${doc.id} created successfully` });
+      if (!doc.exists) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      if (doc.data().adminHandle !== req.user.handle) {
+        return res.status(403).json({ error: "Unauthorized" });
+      } else {
+        return document.update(projectDetails);
+      }
+    })
+    .then(() => {
+      return res.json({ message: "Details updated/added successfully" });
     })
     .catch(err => {
-      res.status(500).json({ error: "Something went wrong" });
       console.error(err);
+      return res.status(500).json({ error: err.code });
     });
 };
 

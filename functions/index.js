@@ -9,9 +9,11 @@ const {
   getProjects,
   getProject,
   createProject,
-  createTask,
-  deleteProject
+  deleteProject,
+  updateProject
 } = require("./handlers/projects");
+
+const { createTask } = require("./handlers/tasks");
 
 const { getUsers, signup, login } = require("./handlers/users");
 
@@ -19,8 +21,11 @@ const { getUsers, signup, login } = require("./handlers/users");
 app.get("/projects", getProjects);
 app.get("/project/:projectId", getProject);
 app.post("/project", FBAuth, createProject);
-app.post("/task", FBAuth, createTask);
 app.delete("/project/:projectId", FBAuth, deleteProject);
+app.post("/project/:projectId", FBAuth, updateProject);
+
+// Task routes
+app.post("/task", FBAuth, createTask);
 
 // Users routes
 app.get("/users", getUsers);
