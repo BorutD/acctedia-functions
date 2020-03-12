@@ -13,7 +13,12 @@ const {
   updateProject
 } = require("./handlers/projects");
 
-const { createTask } = require("./handlers/tasks");
+const {
+  getTasks,
+  createTask,
+  getTasksFromProject,
+  deleteTask
+} = require("./handlers/tasks");
 
 const { getUsers, signup, login } = require("./handlers/users");
 
@@ -25,7 +30,10 @@ app.delete("/project/:projectId", FBAuth, deleteProject);
 app.post("/project/:projectId", FBAuth, updateProject);
 
 // Task routes
+app.get("/tasks", getTasks);
+app.get("/:projectId/tasks", getTasksFromProject);
 app.post("/task", FBAuth, createTask);
+app.delete("/task/:taskId", FBAuth, deleteTask);
 
 // Users routes
 app.get("/users", getUsers);
